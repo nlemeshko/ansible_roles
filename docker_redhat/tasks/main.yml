@@ -1,0 +1,59 @@
+---
+# tasks file for docker_redhat
+- name: Update all packages to their latest version
+  yum:
+    name: "*"
+    state: latest
+
+- name: Install a list of packages for Docker
+  yum:
+    name:
+      - yum-utils
+      - python3-pip
+    state: present
+
+- name: Install docker python package
+  pip:
+    name: docker
+
+- name: Add repo Docker
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+
+- name: Install a list of packages for Docker
+  yum:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+
+- name: Create dir
+  file:
+    path: "{{ path }}"
+    state: directory
+
+- name: Create index.html
+  get_url:
+    url: https://ifconfig.me
+    dest: "{{ path }}/index.html"
+    mode: '0644'
+
+- name: Copy Dockerfile
+  copy:
+    src: Dockerfile
+    dest: "{{ path }}"
+    owner: root
+    group: root        
+    mode: 0644
+
+- name: Build own image
+  docker_image:
+    name: lesson6:v1.2
+    build:
+      path: "{{ path }}"
+      pull: yes
+    source: build
+    state: present
+  notify: start image

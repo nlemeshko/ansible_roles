@@ -1,0 +1,21 @@
+---
+# handlers file for docker_ubuntu
+- name: start docker
+  service:
+    name: docker
+    state: started
+
+- name: start image
+  docker_container:
+    name: lesson6
+    image: lesson6:v1.0
+    state: started
+    restart: yes
+    ports:
+      - "80:80"
+    register: status_container
+    notify: debug
+
+- name: debug
+  debug:
+    msg: "Result = {{ status_container }}"

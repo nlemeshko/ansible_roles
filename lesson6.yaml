@@ -1,0 +1,8 @@
+---
+- name: Deploy Docker to Server and build and run
+  hosts: AWS
+  become: yes
+
+  roles:
+    - { role: docker_redhat, when: ansible_distribution == "RedHat" }
+    - { role: docker_ubuntu, when: ansible_distribution == "Ubuntu" }

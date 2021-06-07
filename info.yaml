@@ -1,0 +1,10 @@
+---
+- name: Deploy Docker to Server and build and run
+  hosts: AWS
+  become: yes
+
+  tasks:
+
+    - name: Info
+      ansible.builtin.debug:
+        var: ansible_facts

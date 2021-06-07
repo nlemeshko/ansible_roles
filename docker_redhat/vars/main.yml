@@ -1,0 +1,3 @@
+---
+# vars file for docker_redhat
+path: "~/ansible"

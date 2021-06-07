@@ -1,0 +1,72 @@
+---
+# tasks file for docker_ubuntu
+- name: Update all packages to their latest version
+  apt:
+    name: "*"
+    state: latest
+
+- name: Install a list of packages for Docker
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg 
+      - lsb-release
+      - python3-pip
+
+- name: Install docker python package
+  pip:
+    name: docker
+
+- name: Add Docker GPT key
+  apt_key:
+    url: "https://download.docker.com/linux/ubuntu/gpg"
+    state: present
+
+- name: Add repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    state: present
+
+- name: Update all packages to their latest version
+  apt:
+    name: "*"
+    state: latest
+
+- name: Install a list of packages for Docker
+  apt:
+    pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+  notify: start docker
+
+- name: Create dir
+  file:
+    path: "{{ path }}"
+    state: directory
+
+- name: Create index.html
+  get_url:
+    url: https://ifconfig.me
+    dest: "{{ path }}/index.html"
+    mode: '0644'
+
+- name: Copy Dockerfile
+  copy:
+    src: Dockerfile
+    dest: "{{ path }}"
+    owner: root
+    group: root        
+    mode: 0644
+
+- name: Build own image
+  docker_image:
+    name: lesson6:v1.2
+    build:
+      path: "{{ path }}"
+      pull: yes
+    source: build
+    state: present
+    notify: start image
