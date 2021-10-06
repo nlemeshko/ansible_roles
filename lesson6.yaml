@@ -1,8 +1,11 @@
 ---
 - name: Deploy Docker to Server and build and run
-  hosts: AWS
+  hosts: yandex
   become: yes
 
   roles:
-    - { role: docker_redhat, when: ansible_distribution == "RedHat" }
+    - { role: docker_redhat, when: ansible_distribution == "CentOS" }
     - { role: docker_ubuntu, when: ansible_distribution == "Ubuntu" }
+
+  handlers:
+  - include: docker_ubuntu/handlers/main.yml 

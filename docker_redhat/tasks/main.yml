@@ -2,8 +2,7 @@
 # tasks file for docker_redhat
 - name: Update all packages to their latest version
   yum:
-    name: "*"
-    state: latest
+    update_cache: yes 
 
 - name: Install a list of packages for Docker
   yum:

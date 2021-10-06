@@ -1,16 +1,2 @@
 ---
 # handlers file for docker_redhat
-- name: start image
-  docker_container:
-    name: lesson6
-    image: lesson6:v1.4
-    state: started
-    restart: yes
-    ports:
-      - "80:80"
-  register: status_container
-  notify: debug
-
-- name: debug
-  debug:
-    msg: "Result = {{ status_container }}"

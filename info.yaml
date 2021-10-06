@@ -1,6 +1,6 @@
 ---
 - name: Deploy Docker to Server and build and run
-  hosts: AWS
+  hosts: yandex
   become: yes
 
   tasks:

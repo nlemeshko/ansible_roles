@@ -1,10 +1,5 @@
 ---
 # handlers file for docker_ubuntu
-- name: start docker
-  service:
-    name: docker
-    state: started
-
 - name: start image
   docker_container:
     name: lesson6

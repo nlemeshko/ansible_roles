@@ -2,9 +2,6 @@
 # tasks file for docker_ubuntu
 - name: Update all packages to their latest version
   apt:
-    name: "*"
-    state: latest
-    force_apt_get: yes
     update_cache: yes 
 
 - name: Install a list of packages for Docker
@@ -33,8 +30,7 @@
 
 - name: Update all packages to their latest version
   apt:
-    name: "*"
-    state: latest
+    update_cache: yes 
 
 - name: Install a list of packages for Docker
   apt:
@@ -42,7 +38,11 @@
       - docker-ce
       - docker-ce-cli
       - containerd.io
-  notify: start docker
+
+- name: start docker
+  service:
+    name: docker
+    state: started
 
 - name: Create dir
   file:
